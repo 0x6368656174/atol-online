@@ -20,34 +20,22 @@ use function is_null;
  */
 class ReceiptItem implements RequestPart
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $name = null;
 
-  /**
-   * @var float
-   */
+  /** @var float */
   private $price = null;
 
-  /**
-   * @var float;
-   */
+  /** @var float; */
   private $quantity = null;
 
-  /**
-   * @var float
-   */
+  /** @var float */
   private $sum = null;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $tax = null;
 
-  /**
-   * @var float|null
-   */
+  /** @var float|null */
   private $taxSum = null;
 
   /**

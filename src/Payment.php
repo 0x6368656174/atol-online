@@ -19,14 +19,10 @@ use ItQuasar\AtolOnline\Exception\SdkException;
  */
 class Payment implements RequestPart
 {
-  /**
-   * @var int
-   */
+  /** @var int */
   private $type = 1;
 
-  /**
-   * @var float
-   */
+  /** @var float */
   private $sum = null;
 
   /**

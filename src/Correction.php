@@ -21,14 +21,10 @@ use function count;
  */
 class Correction implements RequestPart
 {
-  /**
-   * @var CorrectionAttributes
-   */
+  /** @var CorrectionAttributes */
   private $attributes = null;
 
-  /**
-   * @var Payment[]
-   */
+  /** @var Payment[] */
   private $payments = [];
 
   /**

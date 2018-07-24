@@ -20,24 +20,16 @@ use ItQuasar\AtolOnline\Exception\SdkException;
  */
 class Sell implements Request
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $externalId = null;
 
-  /**
-   * @var Receipt
-   */
+  /** @var Receipt */
   private $receipt = null;
 
-  /**
-   * @var Service
-   */
+  /** @var Service */
   private $service = null;
 
-  /**
-   * @var DateTime
-   */
+  /** @var DateTime */
   private $timestamp = null;
 
   /**

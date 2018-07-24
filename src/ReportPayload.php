@@ -18,49 +18,31 @@ use DateTime;
  */
 class ReportPayload implements ResponsePart
 {
-  /**
-   * @var int
-   */
+  /** @var int */
   private $fiscalReceiptNumber;
 
-  /**
-   * @var int
-   */
+  /** @var int */
   private $shiftNumber;
 
-  /**
-   * @var DateTime
-   */
+  /** @var DateTime */
   private $receiptDatetime;
 
-  /**
-   * @var float
-   */
+  /** @var float */
   private $total;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $fnNumber;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $ecrRegistrationNumber;
 
-  /**
-   * @var int
-   */
+  /** @var int */
   private $fiscalDocumentNumber;
 
-  /**
-   * @var int
-   */
+  /** @var int */
   private $fiscalDocumentAttribute;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $fnsSite;
 
   /**

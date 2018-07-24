@@ -18,29 +18,19 @@ use Psr\Log\LogLevel;
 
 class Client
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $host = 'https://online.atol.ru';
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $apiVersion = 'v3';
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $token;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $groupCode;
 
-  /**
-   * @var LoggerInterface
-   */
+  /** @var LoggerInterface */
   private $logger;
 
   /**

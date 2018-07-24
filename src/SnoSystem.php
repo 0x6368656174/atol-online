@@ -16,33 +16,21 @@ namespace ItQuasar\AtolOnline;
  */
 class SnoSystem
 {
-  /**
-   * Общая СН.
-   */
+  /** Общая СН. */
   public const OSN = 'osn';
 
-  /**
-   * Упрощенная СН (доходы).
-   */
+  /** Упрощенная СН (доходы). */
   public const USN_INCOME = 'usn_income';
 
-  /**
-   * Упрощенная СН (доходы минус расходы).
-   */
+  /** Упрощенная СН (доходы минус расходы). */
   public const USN_INCOME_OUTCOME = 'usn_income_outcome';
 
-  /**
-   * Единый налог на вмененный доход.
-   */
+  /** Единый налог на вмененный доход. */
   public const ENVD = 'envd';
 
-  /**
-   * Единый сельскохозяйственный налог.
-   */
+  /** Единый сельскохозяйственный налог. */
   public const ESN = 'esn';
 
-  /**
-   * Патентная СН.
-   */
+  /** Патентная СН. */
   public const PATENT = 'patent';
 }

@@ -21,19 +21,13 @@ use function strlen;
  */
 class Service implements RequestPart
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $inn = null;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $paymentAddress = null;
 
-  /**
-   * @var null|string
-   */
+  /** @var null|string */
   private $callbackUrl = null;
 
   /**

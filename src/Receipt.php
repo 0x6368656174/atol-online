@@ -22,24 +22,16 @@ use function round;
  */
 class Receipt implements RequestPart
 {
-  /**
-   * @var ReceiptAttributes
-   */
+  /** @var ReceiptAttributes */
   private $attributes = null;
 
-  /**
-   * @var ReceiptItem[]
-   */
+  /** @var ReceiptItem[] */
   private $items = [];
 
-  /**
-   * @var Payment[]
-   */
+  /** @var Payment[] */
   private $payments = [];
 
-  /**
-   * @var float
-   */
+  /** @var float */
   private $total = null;
 
   /**

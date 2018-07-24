@@ -19,14 +19,10 @@ use function is_null;
  */
 class CorrectionAttributes implements RequestPart
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $sno = null;
 
-  /**
-   * @var string|null
-   */
+  /** @var string|null */
   private $tax = null;
 
   /**

@@ -21,19 +21,13 @@ use function preg_match;
  */
 class ReceiptAttributes implements RequestPart
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $sno = null;
 
-  /**
-   * @var string|null
-   */
+  /** @var string|null */
   private $email = null;
 
-  /**
-   * @var string|null
-   */
+  /** @var string|null */
   private $phone = null;
 
   /**

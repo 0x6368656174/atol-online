@@ -20,24 +20,16 @@ use ItQuasar\AtolOnline\Exception\SdkException;
  */
 class SellCorrection implements Request
 {
-  /**
-   * @var string
-   */
+  /** @var string */
   private $externalId = null;
 
-  /**
-   * @var Correction
-   */
+  /** @var Correction */
   private $correction = null;
 
-  /**
-   * @var Service
-   */
+  /** @var Service */
   private $service = null;
 
-  /**
-   * @var DateTime
-   */
+  /** @var DateTime */
   private $timestamp = null;
 
   /**

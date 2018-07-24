@@ -19,64 +19,40 @@ use function is_null;
  */
 class Report implements ResponsePart
 {
-  /**
-   * Статус "готово".
-   */
+  /** Статус "готово". */
   public const STATUS_DONE = 'done';
 
-  /**
-   * Статус "ошибка".
-   */
+  /** Статус "ошибка". */
   public const STATUS_FAIL = 'fail';
 
-  /**
-   * Статус "ожидание".
-   */
+  /** Статус "ожидание". */
   public const STATUS_WAIT = 'wait';
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $uuid;
 
-  /**
-   * @var DateTime
-   */
+  /** @var DateTime */
   private $timestamp;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $callbackUrl;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $status;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $groupCode;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $daemonCode;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $deviceCode;
 
-  /**
-   * @var ReportError|null
-   */
+  /** @var ReportError|null */
   private $error;
 
-  /**
-   * @var ReportPayload|null
-   */
+  /** @var ReportPayload|null */
   private $payload;
 
   /**

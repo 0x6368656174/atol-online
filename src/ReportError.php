@@ -16,34 +16,22 @@ namespace ItQuasar\AtolOnline;
  */
 class ReportError implements ResponsePart
 {
-  /**
-   * Системная ошибка.
-   */
+  /** Системная ошибка. */
   public const TYPE_SYSTEM = 'system';
 
-  /**
-   * Ошибка при работе с ККТ.
-   */
+  /** Ошибка при работе с ККТ. */
   public const TYPE_DRIVER = 'driver';
 
-  /**
-   * Превышено время ожидания. Время ожидания задается в системе. На данный момент установлено 300 сек.
-   */
+  /** Превышено время ожидания. Время ожидания задается в системе. На данный момент установлено 300 сек. */
   public const TYPE_TIMEOUT = 'timeout';
 
-  /**
-   * @var int
-   */
+  /** @var int */
   private $code;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $text;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   private $type;
 
   /**
