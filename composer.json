@@ -1,6 +1,6 @@
 {
     "name": "it-quasar/atol-online",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "Библиотека для работы с Atol Online (частичная поддержка)",
     "type": "library",
     "license": "GPL-3.0-or-later",
