@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Библиотека для работы с Atol Online (частичная поддержка)",
     "type": "library",
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "scripts": {
         "fix": "./vendor/bin/php-cs-fixer fix ./src && ./vendor/bin/php-cs-fixer fix ./tests",
         "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests"
