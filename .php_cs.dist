@@ -1,0 +1,31 @@
+<?php
+
+return PhpCsFixer\Config::create()
+  ->setRiskyAllowed(true)
+  ->setIndent('  ')
+  ->setRules(
+    [
+      '@Symfony' => true,
+      '@PHP71Migration' => true,
+      'align_multiline_comment' => true,
+      'array_indentation' => true,
+      'array_syntax' => ['syntax' => 'short'],
+      'declare_strict_types' => true,
+      'dir_constant' => true,
+      'heredoc_to_nowdoc' => true,
+      'list_syntax' => ['syntax' => 'short'],
+      'modernize_types_casting' => true,
+      'no_multiline_whitespace_before_semicolons' => true,
+      'no_php4_constructor' => true,
+      'no_short_echo_tag' => true,
+      'no_unreachable_default_argument_value' => true,
+      'no_useless_else' => true,
+      'no_useless_return' => true,
+      'ordered_class_elements' => true,
+      'ordered_imports' => true,
+      'psr4' => true,
+      'semicolon_after_instruction' => true,
+      'single_line_comment_style' => true,
+    ]
+  )
+  ->setCacheFile(__DIR__.'/.php_cs.cache');

@@ -1,0 +1,31 @@
+{
+    "name": "it-quasar/atol-online",
+    "version": "1.0.0",
+    "description": "Библиотека для работы с Atol Online (частичная поддержка)",
+    "type": "library",
+    "license": "GNU GPL v3.0",
+    "scripts": {
+        "fix": "./vendor/bin/php-cs-fixer fix ./src",
+        "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests"
+    },
+    "authors": [
+        {
+            "name": "Pavel Puchkov",
+            "email": "0x6368656174@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ItQuasar\\AtolOnline\\": "src"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "psr/log": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.12",
+        "phpunit/phpunit": "^7.2"
+    }
+}

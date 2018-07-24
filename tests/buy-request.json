@@ -1,0 +1,39 @@
+{
+  "external_id": "17052917561851307",
+  "receipt": {
+    "attributes": {
+      "sno": "osn",
+      "email": "mail@example.com"
+    },
+    "items": [
+      {
+        "name": "Название товара 1",
+        "price": 5000,
+        "quantity": 1,
+        "sum": 5000,
+        "tax": "vat10",
+        "tax_sum": 454.55
+      },
+      {
+        "name": "Название товара 2",
+        "price": 1456.21,
+        "quantity": 2,
+        "sum": 2612.42,
+        "tax": "vat118"
+      }
+    ],
+    "payments": [
+      {
+        "type": 1,
+        "sum": 7612
+      }
+    ],
+    "total": 7612
+  },
+  "service": {
+    "inn": "331122667723",
+    "payment_address": "example.com",
+    "callback_url": "http://example.com/callback"
+  },
+  "timestamp": "29.05.2017 17:56:18"
+}
