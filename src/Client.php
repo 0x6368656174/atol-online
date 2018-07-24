@@ -51,6 +51,8 @@ class Client
    */
   public function __construct(string $login, string $password, string $groupCode, LoggerInterface $logger = null)
   {
+    $this->groupCode = $groupCode;
+
     $this->token = $this->getToken($login, $password);
     $this->logger = $logger;
   }
