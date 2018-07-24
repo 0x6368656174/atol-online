@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-/**
+/*
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-use ItQuasar\AtolOnline\Buy;
 use ItQuasar\AtolOnline\Payment;
 use ItQuasar\AtolOnline\Receipt;
 use ItQuasar\AtolOnline\ReceiptAttributes;
 use ItQuasar\AtolOnline\ReceiptItem;
-use ItQuasar\AtolOnline\Sell;
 use ItQuasar\AtolOnline\SellRefund;
 use ItQuasar\AtolOnline\Service;
 use ItQuasar\AtolOnline\SnoSystem;
@@ -75,7 +73,8 @@ final class SellRefundTest extends TestCase
     $this->assertEquals($expectedDate, $request->toArray());
   }
 
-  public function testCatValidOperation() {
+  public function testCatValidOperation()
+  {
     $request = new SellRefund();
 
     $this->assertEquals('sell_refund', $request->getOperation());

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use ItQuasar\AtolOnline\BuyCorrection;
 use ItQuasar\AtolOnline\Correction;
 use ItQuasar\AtolOnline\CorrectionAttributes;
 use ItQuasar\AtolOnline\Payment;
@@ -18,8 +17,8 @@ use PHPUnit\Framework\TestCase;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-final class SellCorrectionTest extends TestCase {
+final class SellCorrectionTest extends TestCase
+{
   public function testCanReturnValidArray()
   {
     $dir = __DIR__;
@@ -57,7 +56,8 @@ final class SellCorrectionTest extends TestCase {
     $this->assertEquals($expectedDate, $request->toArray());
   }
 
-  public function testCatValidOperation() {
+  public function testCatValidOperation()
+  {
     $request = new SellCorrection();
 
     $this->assertEquals('sell_correction', $request->getOperation());

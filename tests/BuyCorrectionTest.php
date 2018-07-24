@@ -17,8 +17,8 @@ use PHPUnit\Framework\TestCase;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-final class BuyCorrectionTest extends TestCase {
+final class BuyCorrectionTest extends TestCase
+{
   public function testCanReturnValidArray()
   {
     $dir = __DIR__;
@@ -56,7 +56,8 @@ final class BuyCorrectionTest extends TestCase {
     $this->assertEquals($expectedDate, $request->toArray());
   }
 
-  public function testCatValidOperation() {
+  public function testCatValidOperation()
+  {
     $request = new BuyCorrection();
 
     $this->assertEquals('buy_correction', $request->getOperation());

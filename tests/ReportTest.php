@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/**
+/*
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 final class ReportTest extends TestCase
 {
-  public function testCanParseValue() {
+  public function testCanParseValue()
+  {
     $dir = __DIR__;
     $data = file_get_contents("$dir/report-response.json");
     $dataArray = json_decode($data, true);
@@ -38,6 +39,5 @@ final class ReportTest extends TestCase
     $this->assertEquals('prod-agent-1', $report->getDaemonCode());
     $this->assertEquals('KSR13.00-1-11', $report->getDeviceCode());
     $this->assertEquals('', $report->getCallbackUrl());
-
   }
 }

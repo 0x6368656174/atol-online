@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/**
+/*
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -73,7 +73,8 @@ final class BuyTest extends TestCase
     $this->assertEquals($expectedDate, $request->toArray());
   }
 
-  public function testCatValidOperation() {
+  public function testCatValidOperation()
+  {
     $request = new Buy();
 
     $this->assertEquals('buy', $request->getOperation());

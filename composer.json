@@ -5,7 +5,7 @@
     "type": "library",
     "license": "GNU GPL v3.0",
     "scripts": {
-        "fix": "./vendor/bin/php-cs-fixer fix ./src",
+        "fix": "./vendor/bin/php-cs-fixer fix ./src && ./vendor/bin/php-cs-fixer fix ./tests",
         "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests"
     },
     "authors": [
