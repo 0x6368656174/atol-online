@@ -49,10 +49,14 @@ class CorrectionAttributes implements RequestPart
    * Поле необязательно, если у организации один тип налогообложения.
    *
    * @param string
+   *
+   * @return CorrectionAttributes
    */
-  public function setSno($sno): void
+  public function setSno($sno): self
   {
     $this->sno = $sno;
+
+    return $this;
   }
 
   /**
@@ -77,10 +81,14 @@ class CorrectionAttributes implements RequestPart
    * - TaxSystem::VAT118 – НДС чека по расчетной ставке 18/118.
    *
    * @param string
+   *
+   * @return CorrectionAttributes
    */
-  public function setTax(string $tax): void
+  public function setTax(string $tax): self
   {
     $this->tax = $tax;
+
+    return $this;
   }
 
   public function toArray(): array

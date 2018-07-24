@@ -52,7 +52,7 @@ class Client
    *
    * @return Client
    */
-  public function setHost($value)
+  public function setHost($value): self
   {
     $this->host = $value;
 

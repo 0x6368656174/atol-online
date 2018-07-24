@@ -64,14 +64,18 @@ class ReceiptItem implements RequestPart
    * - дробная часть не более 2 знаков.
    *
    * @param float|null $taxSum
+   *
+   * @return ReceiptItem
    */
-  public function setTaxSum(?float $taxSum): void
+  public function setTaxSum(?float $taxSum): self
   {
     if ($taxSum > 99999999) {
       throw new InvalidArgumentException('TaxSum too big. Max = 99999999');
     }
 
     $this->taxSum = $taxSum;
+
+    return $this;
   }
 
   /**
@@ -88,14 +92,18 @@ class ReceiptItem implements RequestPart
    * Устанавливает наименование товара. Максимальная длина строки – 64 символа.
    *
    * @param string $name
+   *
+   * @return ReceiptItem
    */
-  public function setName(string $name): void
+  public function setName(string $name): self
   {
     if (strlen($name) > 64) {
       throw new InvalidArgumentException('Name too big. Max length size = 64');
     }
 
     $this->name = $name;
+
+    return $this;
   }
 
   /**
@@ -114,14 +122,18 @@ class ReceiptItem implements RequestPart
    * - дробная часть не более 2 знаков.
    *
    * @param float $price
+   *
+   * @return ReceiptItem
    */
-  public function setPrice(float $price): void
+  public function setPrice(float $price): self
   {
     if ($price > 99999999) {
       throw new InvalidArgumentException('Price too big. Max = 99999999');
     }
 
     $this->price = $price;
+
+    return $this;
   }
 
   /**
@@ -140,14 +152,18 @@ class ReceiptItem implements RequestPart
    * - дробная часть не более 3 знаков.
    *
    * @param float $quantity
+   *
+   * @return ReceiptItem
    */
-  public function setQuantity(float $quantity): void
+  public function setQuantity(float $quantity): self
   {
     if ($quantity > 99999999) {
       throw new InvalidArgumentException('Quantity too big. Max = 99999999');
     }
 
     $this->quantity = $quantity;
+
+    return $this;
   }
 
   /**
@@ -170,14 +186,18 @@ class ReceiptItem implements RequestPart
    * скидки/надбавки по позициям.
    *
    * @param float $sum
+   *
+   * @return ReceiptItem
    */
-  public function setSum(float $sum): void
+  public function setSum(float $sum): self
   {
     if ($sum > 99999999) {
       throw new InvalidArgumentException('Sum too big. Max = 99999999');
     }
 
     $this->sum = $sum;
+
+    return $this;
   }
 
   /**
@@ -202,10 +222,14 @@ class ReceiptItem implements RequestPart
    * - TaxSystem::VAT118 – НДС чека по расчетной ставке 18/118.
    *
    * @param string
+   *
+   * @return ReceiptItem
    */
-  public function setTax(string $tax): void
+  public function setTax(string $tax): self
   {
     $this->tax = $tax;
+
+    return $this;
   }
 
   public function toArray(): array

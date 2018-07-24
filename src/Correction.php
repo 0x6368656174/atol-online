@@ -41,10 +41,14 @@ class Correction implements RequestPart
    * Устанавливает атрибуты коррекции.
    *
    * @param CorrectionAttributes $attributes
+   *
+   * @return Correction
    */
-  public function setAttributes(CorrectionAttributes $attributes): void
+  public function setAttributes(CorrectionAttributes $attributes): self
   {
     $this->attributes = $attributes;
+
+    return $this;
   }
 
   /**
@@ -63,14 +67,18 @@ class Correction implements RequestPart
    * Ограничение по количеству от 1 до 10.
    *
    * @param Payment[] $payments
+   *
+   * @return Correction
    */
-  public function setPayments(array $payments): void
+  public function setPayments(array $payments): self
   {
     if (0 == count($payments) || count($payments) > 10) {
       throw new InvalidArgumentException('Payments count must be > 1 and < 10');
     }
 
     $this->payments = $payments;
+
+    return $this;
   }
 
   /**

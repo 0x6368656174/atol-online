@@ -54,14 +54,18 @@ class Sell implements Request
    * Максимальная длина строки – 256 символов
    *
    * @param string $externalId
+   *
+   * @return Sell
    */
-  public function setExternalId(string $externalId): void
+  public function setExternalId(string $externalId): self
   {
     if (strlen($externalId) > 256) {
       throw new InvalidArgumentException('ExternalId too big. Max length size = 256');
     }
 
     $this->externalId = $externalId;
+
+    return $this;
   }
 
   /**
@@ -78,10 +82,14 @@ class Sell implements Request
    * Устанавливает чек.
    *
    * @param Receipt $receipt
+   *
+   * @return Sell
    */
-  public function setReceipt(Receipt $receipt): void
+  public function setReceipt(Receipt $receipt): self
   {
     $this->receipt = $receipt;
+
+    return $this;
   }
 
   /**
@@ -98,10 +106,14 @@ class Sell implements Request
    * Устанавливает служебный раздел.
    *
    * @param Service $service
+   *
+   * @return Sell
    */
-  public function setService(Service $service): void
+  public function setService(Service $service): self
   {
     $this->service = $service;
+
+    return $this;
   }
 
   /**
@@ -118,10 +130,14 @@ class Sell implements Request
    * Устанавливает дату и время документа внешней системы.
    *
    * @param DateTime $timestamp
+   *
+   * @return Sell
    */
-  public function setTimestamp(DateTime $timestamp): void
+  public function setTimestamp(DateTime $timestamp): self
   {
     $this->timestamp = $timestamp;
+
+    return $this;
   }
 
   public function toArray(): array

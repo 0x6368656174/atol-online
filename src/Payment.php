@@ -43,10 +43,14 @@ class Payment implements RequestPart
    * - 2 – 9 – расширенные типы оплаты. Для каждого фискального типа оплаты можно указать расширенный тип оплаты.
    *
    * @param int $type
+   *
+   * @return Payment
    */
-  public function setType(int $type): void
+  public function setType(int $type): self
   {
     $this->type = $type;
+
+    return $this;
   }
 
   /**
@@ -65,14 +69,18 @@ class Payment implements RequestPart
    * - дробная часть не более 2 знаков.
    *
    * @param float $sum
+   *
+   * @return Payment
    */
-  public function setSum(float $sum): void
+  public function setSum(float $sum): self
   {
     if ($sum > 99999999) {
       throw new InvalidArgumentException('Sum too big. Max = 99999999');
     }
 
     $this->sum = $sum;
+
+    return $this;
   }
 
   public function toArray(): array

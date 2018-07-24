@@ -54,10 +54,14 @@ class ReceiptAttributes implements RequestPart
    * Поле необязательно, если у организации один тип налогообложения.
    *
    * @param string
+   *
+   * @return ReceiptAttributes
    */
-  public function setSno($sno): void
+  public function setSno($sno): self
   {
     $this->sno = $sno;
+
+    return $this;
   }
 
   /**
@@ -78,14 +82,18 @@ class ReceiptAttributes implements RequestPart
    * В запросе обязательно должно быть заполнено хотя бы одно из полей: email или phone.
    *
    * @param null|string $email
+   *
+   * @return ReceiptAttributes
    */
-  public function setEmail(?string $email): void
+  public function setEmail(?string $email): self
   {
     if (strlen($email) > 64) {
       throw new InvalidArgumentException('Email too big. Max length size = 64');
     }
 
     $this->email = $email;
+
+    return $this;
   }
 
   /**
@@ -110,8 +118,10 @@ class ReceiptAttributes implements RequestPart
    * В запросе обязательно должно быть заполнено хотя бы одно из полей: email или phone.
    *
    * @param null|string $phone
+   *
+   * @return ReceiptAttributes
    */
-  public function setPhone(?string $phone): void
+  public function setPhone(?string $phone): self
   {
     if (strlen($phone) > 64) {
       throw new InvalidArgumentException('Phone too big. Max length size = 64');
@@ -122,6 +132,8 @@ class ReceiptAttributes implements RequestPart
     }
 
     $this->phone = $phone;
+
+    return $this;
   }
 
   public function toArray(): array

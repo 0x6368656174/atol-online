@@ -49,8 +49,10 @@ class Service implements RequestPart
    * Допустимое количество символов 10 или 12
    *
    * @param string $inn
+   *
+   * @return Service
    */
-  public function setInn(string $inn): void
+  public function setInn(string $inn): self
   {
     $length = strlen($inn);
     if (10 !== $length && 12 !== $length) {
@@ -58,6 +60,8 @@ class Service implements RequestPart
     }
 
     $this->inn = $inn;
+
+    return $this;
   }
 
   /**
@@ -79,14 +83,18 @@ class Service implements RequestPart
    * Максимальная длина строки – 256 символов.
    *
    * @param string $paymentAddress
+   *
+   * @return Service
    */
-  public function setPaymentAddress(string $paymentAddress): void
+  public function setPaymentAddress(string $paymentAddress): self
   {
     if (strlen($paymentAddress) > 256) {
       throw new InvalidArgumentException('PaymentAddress too big. Max length size = 256');
     }
 
     $this->paymentAddress = $paymentAddress;
+
+    return $this;
   }
 
   /**
@@ -108,14 +116,18 @@ class Service implements RequestPart
    * Максимальная длина строки – 256 символов
    *
    * @param null|string $callbackUrl
+   *
+   * @return Service
    */
-  public function setCallbackUrl(?string $callbackUrl): void
+  public function setCallbackUrl(?string $callbackUrl): self
   {
     if (strlen($callbackUrl) > 256) {
       throw new InvalidArgumentException('CallbackUrl too big. Max length size = 256');
     }
 
     $this->callbackUrl = $callbackUrl;
+
+    return $this;
   }
 
   public function toArray(): array

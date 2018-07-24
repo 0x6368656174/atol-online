@@ -50,14 +50,18 @@ class Receipt implements RequestPart
    * - дробная часть не более 2 знаков.
    *
    * @param float $total
+   *
+   * @return Receipt
    */
-  public function setTotal(float $total): void
+  public function setTotal(float $total): self
   {
     if ($total > 99999999) {
       throw new InvalidArgumentException('Total too big. Max = 99999999');
     }
 
     $this->total = $total;
+
+    return $this;
   }
 
   /**
@@ -74,10 +78,14 @@ class Receipt implements RequestPart
    * Устанавливает атрибуты чека.
    *
    * @param ReceiptAttributes $attributes
+   *
+   * @return Receipt
    */
-  public function setAttributes(ReceiptAttributes $attributes): void
+  public function setAttributes(ReceiptAttributes $attributes): self
   {
     $this->attributes = $attributes;
+
+    return $this;
   }
 
   /**
@@ -96,14 +104,18 @@ class Receipt implements RequestPart
    * Ограничение по количеству от 1 до 100.
    *
    * @param ReceiptItem[] $items
+   *
+   * @return Receipt
    */
-  public function setItems(array $items): void
+  public function setItems(array $items): self
   {
     if (0 == count($items) || count($items) > 100) {
       throw new InvalidArgumentException('Items count must be > 1 and < 100');
     }
 
     $this->items = $items;
+
+    return $this;
   }
 
   /**
@@ -138,14 +150,18 @@ class Receipt implements RequestPart
    * Ограничение по количеству от 1 до 10.
    *
    * @param Payment[] $payments
+   *
+   * @return Receipt
    */
-  public function setPayments(array $payments): void
+  public function setPayments(array $payments): self
   {
     if (0 == count($payments) || count($payments) > 10) {
       throw new InvalidArgumentException('Payments count must be > 1 and < 10');
     }
 
     $this->payments = $payments;
+
+    return $this;
   }
 
   /**

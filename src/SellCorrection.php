@@ -54,14 +54,18 @@ class SellCorrection implements Request
    * Максимальная длина строки – 256 символов
    *
    * @param string $externalId
+   *
+   * @return SellCorrection
    */
-  public function setExternalId(string $externalId): void
+  public function setExternalId(string $externalId): self
   {
     if (strlen($externalId) > 256) {
       throw new InvalidArgumentException('ExternalId too big. Max length size = 256');
     }
 
     $this->externalId = $externalId;
+
+    return $this;
   }
 
   /**
@@ -78,10 +82,14 @@ class SellCorrection implements Request
    * Устанавливает коррекцию.
    *
    * @param Correction $correction
+   *
+   * @return SellCorrection
    */
-  public function setCorrection(Correction $correction): void
+  public function setCorrection(Correction $correction): self
   {
     $this->correction = $correction;
+
+    return $this;
   }
 
   /**
@@ -98,10 +106,14 @@ class SellCorrection implements Request
    * Устанавливает служебный раздел.
    *
    * @param Service $service
+   *
+   * @return SellCorrection
    */
-  public function setService(Service $service): void
+  public function setService(Service $service): self
   {
     $this->service = $service;
+
+    return $this;
   }
 
   /**
@@ -118,10 +130,14 @@ class SellCorrection implements Request
    * Устанавливает дату и время документа внешней системы.
    *
    * @param DateTime $timestamp
+   *
+   * @return SellCorrection
    */
-  public function setTimestamp(DateTime $timestamp): void
+  public function setTimestamp(DateTime $timestamp): self
   {
     $this->timestamp = $timestamp;
+
+    return $this;
   }
 
   public function toArray(): array
