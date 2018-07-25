@@ -25,7 +25,7 @@ class ReportPayload implements ResponsePart
   private $shiftNumber;
 
   /** @var DateTime */
-  private $receiptDatetime;
+  private $receiptDateTime;
 
   /** @var float */
   private $total;
@@ -70,13 +70,13 @@ class ReportPayload implements ResponsePart
    *
    * @return DateTime
    */
-  public function getReceiptDatetime(): DateTime
+  public function getReceiptDateTime(): DateTime
   {
-    return $this->receiptDatetime;
+    return $this->receiptDateTime;
   }
 
   /**
-   * Возвращает Итоговая сумма документа в рублях.
+   * Возвращает итоговую сумму документа в рублях.
    *
    * При регистрации в ККТ происходит расчёт фактической суммы: суммирование значений sum позиций
    *
@@ -143,7 +143,7 @@ class ReportPayload implements ResponsePart
 
     $result->fiscalReceiptNumber = $array['fiscal_receipt_number'];
     $result->shiftNumber = $array['shift_number'];
-    $result->receiptDatetime = DateTime::createFromFormat('d.m.Y H:i:s', $array['receipt_datetime']);
+    $result->receiptDateTime = DateTime::createFromFormat('d.m.Y H:i:s', $array['receipt_datetime']);
     $result->total = $array['total'];
     $result->fnNumber = $array['fn_number'];
     $result->ecrRegistrationNumber = $array['ecr_registration_number'];

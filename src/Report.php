@@ -40,13 +40,13 @@ class Report implements ResponsePart
   /** @var string */
   private $status;
 
-  /** @var string */
+  /** @var string|null */
   private $groupCode;
 
-  /** @var string */
+  /** @var string|null */
   private $daemonCode;
 
-  /** @var string */
+  /** @var string|null */
   private $deviceCode;
 
   /** @var ReportError|null */
@@ -103,9 +103,9 @@ class Report implements ResponsePart
   /**
    * Возвращает идентификатор группы ККТ.
    *
-   * @return string
+   * @return string|null
    */
-  public function getGroupCode(): string
+  public function getGroupCode(): ?string
   {
     return $this->groupCode;
   }
@@ -113,9 +113,9 @@ class Report implements ResponsePart
   /**
    * Возвращает наименование сервера.
    *
-   * @return string
+   * @return string|null
    */
-  public function getDaemonCode(): string
+  public function getDaemonCode(): ?string
   {
     return $this->daemonCode;
   }
@@ -123,9 +123,9 @@ class Report implements ResponsePart
   /**
    * Возвращает код ККТ.
    *
-   * @return string
+   * @return string|null
    */
-  public function getDeviceCode(): string
+  public function getDeviceCode(): ?string
   {
     return $this->deviceCode;
   }
