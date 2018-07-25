@@ -26,11 +26,12 @@ use ItQuasar\AtolOnline\Payment;
 use ItQuasar\AtolOnline\Receipt;
 use ItQuasar\AtolOnline\ReceiptAttributes;
 use ItQuasar\AtolOnline\ReceiptItem;
-use ItQuasar\AtolOnline\Buy;
+use ItQuasar\AtolOnline\Sell;
 use ItQuasar\AtolOnline\Service;
 use ItQuasar\AtolOnline\SnoSystem;
 use ItQuasar\AtolOnline\TaxSystem;
 
+// Создадим время заказа
 $timestamp = new DateTime();
 $timestamp
   ->setDate(2017, 05, 29)
