@@ -106,8 +106,14 @@ $receipt->addPayment($payment);
 // PSR-совместимый логгер (опциональный параметр)
 $logger = null;
 
+// Логин, пароль и код группы можно найти в "Настройках интергатора", скачиваемых с 
+// личного кабинета АТОЛ Онлайн в ноде <access>
+$login = 'netletest';
+$passwor = 'v2AfscRjr';
+$groupCode = 'netletest_8491';
+
 // Создадим клиент
-$client = new Client('netletest', 'v2AfscRjr', 'netletest_8491', $logger);
+$client = new Client($login, $password, $groupCode, $logger);
 
 // Отравим запрос
 // $uuid будет содержать UUID документа в системе АТОЛ Онлайн
@@ -130,8 +136,17 @@ $uuid = $client->send($request);
 
 use ItQuasar\AtolOnline\Client;
 
+// PSR-совместимый логгер (опциональный параметр)
+$logger = null;
+
+// Логин, пароль и код группы можно найти в "Настройках интергатора", скачиваемых с 
+// личного кабинета АТОЛ Онлайн в ноде <access>
+$login = 'netletest';
+$passwor = 'v2AfscRjr';
+$groupCode = 'netletest_8491';
+
 // Создадим клиент
-$client = new Client('netletest', 'v2AfscRjr', 'netletest_8491', $logger);
+$client = new Client($login, $password, $groupCode, $logger);
 
 // UUID документа, полученный при регистрации документа в системе АТОЛ Онлайн
 $uuid = '...';
