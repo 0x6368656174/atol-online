@@ -184,12 +184,8 @@ class Client
     $error = null;
     if (false === $response) {
       $error = curl_error($ch);
-    } else {
-      $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-      if (200 !== $status) {
-        $error = sprintf('Unexpected status (%s)', $status);
-      }
     }
+
     curl_close($ch);
     if (null !== $error) {
       $this->log(LogLevel::WARNING, 'error: {error} {response}', [
