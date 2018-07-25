@@ -51,23 +51,26 @@ $service
   ->setInn('331122667723')
   ->setPaymentAddress('http://example.com');
 
+// Добавим в запрос сервисный раздел
 $request->setService($service);
 
 // Создадим чек
 $receipt = new Receipt();
 $receipt->setTotal(7612);
 
+// Добавим в запрос чек
 $request->setReceipt($receipt);
 
-// Пропишим атрибуты чека
+// Создадим атрибуты чека
 $attributes = new ReceiptAttributes();
 $attributes
   ->setEmail('mail@example.com')
   ->setSno(SnoSystem::OSN);
 
+// Добавим в чек атрибуты
 $receipt->setAttributes($attributes);
 
-// Добавим в чек первую позицию
+// Создадим первую позицию
 $item1 = new ReceiptItem('Название товара 1');
 $item1
   ->setPrice(5000)
@@ -76,9 +79,10 @@ $item1
   ->setTax(TaxSystem::VAT10)
   ->setTaxSum(454.55);
 
+// Добавим в чек первую позицию
 $receipt->addItem($item1);
 
-// Добавим в чек вторую позицию
+// Создадим вторую позицию
 $item2 = new ReceiptItem('Название товара 2');
 $item2
   ->setPrice(1456.21)
@@ -86,14 +90,16 @@ $item2
   ->setSum(2612.42)
   ->setTax(TaxSystem::VAT118)
 
+// Добавим в чек вторую позицию
 $receipt->addItem($item2);
 
-// Добавим в чек оплату
+// Создадим оплату
 $payment = new Payment();
 $payment
   ->setSum(7612)
   ->setType(1);
 
+// Добавим в чек оплату
 $receipt->addPayment($payment);
 
 // PSR-совместимый логгер (опциональный параметр)
@@ -102,7 +108,8 @@ $logger = null;
 // Создадим клиент
 $client = new Client('netletest', 'v2AfscRjr', 'netletest_8491', $logger);
 
-// Отравим запрос, вернет UUID документа в системе АТОЛ Онлайн
+// Отравим запрос
+// $uuid будет содержать UUID документа в системе АТОЛ Онлайн
 $uuid = $client->send($request);
 ```
 
@@ -125,12 +132,12 @@ use ItQuasar\AtolOnline\Client;
 // Создадим клиент
 $client = new Client('netletest', 'v2AfscRjr', 'netletest_8491', $logger);
 
-// UUID, полученный при регистрации документа в системе АТОЛ Онлайн
+// UUID документа, полученный при регистрации документа в системе АТОЛ Онлайн
 $uuid = '...';
 
-// Отравим запрос, на получение статуса обработки
-// report будет содержать в себе ItQuasar/AtolOnline/Report 
-// Который соответствует структуре описанной в 
+// Отравим запрос на получение статуса обработки.
+// $report будет содержать ItQuasar/AtolOnline/Report,
+// который соответствует структуре описанной в 
 // https://online.atol.ru/files/АТОЛ%20Онлайн._Описание%20протокола.pdf
 $report = $client->getReport($uuid);
 ```
