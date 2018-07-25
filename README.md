@@ -31,58 +31,70 @@ use ItQuasar\AtolOnline\Service;
 use ItQuasar\AtolOnline\SnoSystem;
 use ItQuasar\AtolOnline\TaxSystem;
 
+$timestamp = new DateTime();
+$timestamp
+  ->setDate(2017, 05, 29)
+  ->setTime(17, 56, 18);
+  
 // Создадим запрос на продажу
 // Параметры запроса соответствуют параметрам запроса, описанным в 
 // https://online.atol.ru/files/АТОЛ%20Онлайн._Описание%20протокола.pdf
-$request = new Buy();
-$request->setExternalId('17052917561851307');
+$request = new Sell();
+$request
+  ->setExternalId('17052917561851307')
+  ->setTimestamp($timestamp);
 
-$timestamp = new DateTime();
-$timestamp->setDate(2017, 05, 29);
-$timestamp->setTime(17, 56, 18);
+// Создадим сервисный раздел запроса
+$service = new Service();
+$service
+  ->setCallbackUrl('http://example.com/callback')
+  ->setInn('331122667723')
+  ->setPaymentAddress('http://example.com');
 
-$request->setTimestamp($timestamp);
+$request->setService($service);
 
+// Создадим чек
 $receipt = new Receipt();
 $receipt->setTotal(7612);
 
 $request->setReceipt($receipt);
 
+// Пропишим атрибуты чека
 $attributes = new ReceiptAttributes();
-$attributes->setEmail('mail@example.com');
-$attributes->setSno(SnoSystem::OSN);
+$attributes
+  ->setEmail('mail@example.com')
+  ->setSno(SnoSystem::OSN);
 
 $receipt->setAttributes($attributes);
 
+// Добавим в чек первую позицию
 $item1 = new ReceiptItem('Название товара 1');
-$item1->setPrice(5000);
-$item1->setQuantity(1);
-$item1->setSum(5000);
-$item1->setTax(TaxSystem::VAT10);
-$item1->setTaxSum(454.55);
+$item1
+  ->setPrice(5000)
+  ->setQuantity(1)
+  ->setSum(5000)
+  ->setTax(TaxSystem::VAT10)
+  ->setTaxSum(454.55);
 
 $receipt->addItem($item1);
 
+// Добавим в чек вторую позицию
 $item2 = new ReceiptItem('Название товара 2');
-$item2->setPrice(1456.21);
-$item2->setQuantity(2);
-$item2->setSum(2612.42);
-$item2->setTax(TaxSystem::VAT118);
+$item2
+  ->setPrice(1456.21)
+  ->setQuantity(2)
+  ->setSum(2612.42)
+  ->setTax(TaxSystem::VAT118)
 
 $receipt->addItem($item2);
 
+// Добавим в чек оплату
 $payment = new Payment();
-$payment->setSum(7612);
-$payment->setType(1);
+$payment
+  ->setSum(7612)
+  ->setType(1);
 
 $receipt->addPayment($payment);
-
-$service = new Service();
-$service->setCallbackUrl('http://example.com/callback');
-$service->setInn('331122667723');
-$service->setPaymentAddress('example.com');
-
-$request->setService($service);
 
 // PSR-совместимый логгер (опциональный параметр)
 $logger = null;

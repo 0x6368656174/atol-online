@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
+/**
+ * Чек «Коррекция расхода»
+ */
 class BuyCorrection extends SellCorrection implements Request
 {
   public function getOperation(): string
