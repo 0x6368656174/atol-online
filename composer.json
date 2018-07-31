@@ -1,1 +1,33 @@
-{    "name": "it-quasar/atol-online",    "version": "1.0.6",    "description": "Библиотека для работы с Atol Online (частичная поддержка)",    "type": "library",    "license": "GPL-3.0-or-later",    "scripts": {        "fix": "./vendor/bin/php-cs-fixer fix ./src && ./vendor/bin/php-cs-fixer fix ./tests",        "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests"    },    "authors": [        {            "name": "Pavel Puchkov",            "email": "0x6368656174@gmail.com"        }    ],    "autoload": {        "psr-4": {            "ItQuasar\\AtolOnline\\": "src"        }    },    "minimum-stability": "stable",    "require": {        "php": ">=7.1.0",        "ext-curl": "*",        "ext-json": "*",        "psr/log": "^1.0"    },    "require-dev": {        "friendsofphp/php-cs-fixer": "^2.12",        "phpunit/phpunit": "^7.2"    }}
+{
+  "name": "it-quasar/atol-online",
+  "version": "1.0.7",
+  "description": "Библиотека для работы с Atol Online",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "fix": "./vendor/bin/php-cs-fixer fix ./src && ./vendor/bin/php-cs-fixer fix ./tests",
+    "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests"
+  },
+  "authors": [
+    {
+      "name": "Pavel Puchkov",
+      "email": "0x6368656174@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ItQuasar\\AtolOnline\\": "src"
+    }
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.1.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "psr/log": "^1.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.12",
+    "phpunit/phpunit": "^7.2"
+  }
+}
