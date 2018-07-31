@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
+/**
+ * Чек «Расход»
+ */
 class Buy extends Sell implements Request
 {
   public function getOperation(): string

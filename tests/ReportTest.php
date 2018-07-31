@@ -29,7 +29,7 @@ final class ReportTest extends TestCase
     $this->assertEquals('example.com', $report->getPayload()->getFnsSite());
     $this->assertEquals('1110000100238211', $report->getPayload()->getFnNumber());
     $this->assertEquals(23, $report->getPayload()->getShiftNumber());
-    $this->assertEquals('2017.04.12 20:16:00', $report->getPayload()->getReceiptDatetime()->format('Y.m.d H:i:s'));
+    $this->assertEquals('2017.04.12 20:16:00', $report->getPayload()->getReceiptDateTime()->format('Y.m.d H:i:s'));
     $this->assertEquals(6, $report->getPayload()->getFiscalReceiptNumber());
     $this->assertEquals(133, $report->getPayload()->getFiscalDocumentNumber());
     $this->assertEquals('0000111118041361', $report->getPayload()->getEcrRegistrationNumber());
