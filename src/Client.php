@@ -48,9 +48,9 @@ class Client
   {
     $this->groupCode = $groupCode;
 
-    $this->token = $this->getToken($login, $password);
     $this->logger = $logger;
     $this->cache = $cache;
+    $this->token = $this->getToken($login, $password);
   }
 
   /**
