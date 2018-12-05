@@ -22,8 +22,11 @@ use function round;
  */
 class Receipt implements RequestPart
 {
-  /** @var ReceiptAttributes */
-  private $attributes = null;
+  /** @var null ReceiptClient */
+  private $client = null;
+
+  /** @var null ReceiptCompany */
+  private $company = null;
 
   /** @var ReceiptItem[] */
   private $items = [];
@@ -65,25 +68,49 @@ class Receipt implements RequestPart
   }
 
   /**
-   * Возвращает атрибуты чека.
+   * Возвращает атрибуты клиента.
    *
-   * @return ReceiptAttributes
+   * @return ReceiptClient
    */
-  public function getAttributes(): ReceiptAttributes
+  public function getClient(): ReceiptClient
   {
-    return $this->attributes;
+    return $this->client;
   }
 
   /**
-   * Устанавливает атрибуты чека.
+   * Устанавливает атрибуты клиента.
    *
-   * @param ReceiptAttributes $attributes
+   * @param ReceiptClient $client
    *
    * @return Receipt
    */
-  public function setAttributes(ReceiptAttributes $attributes): self
+  public function setClient(ReceiptClient $client): self
   {
-    $this->attributes = $attributes;
+    $this->client = $client;
+
+    return $this;
+  }
+
+  /**
+   * Возвращает атрибуты компании.
+   *
+   * @return ReceiptCompany
+   */
+  public function getCompany(): ReceiptCompany
+  {
+    return $this->company;
+  }
+
+  /**
+   * Устанавливает атрибуты компании.
+   *
+   * @param ReceiptCompany $company
+   *
+   * @return Receipt
+   */
+  public function setCompany(ReceiptCompany $company): self
+  {
+    $this->company = $company;
 
     return $this;
   }
@@ -182,8 +209,12 @@ class Receipt implements RequestPart
 
   public function toArray(): array
   {
-    if (is_null($this->attributes)) {
-      throw new SdkException('Attributes required');
+    if (is_null($this->client)) {
+      throw new SdkException('Client required');
+    }
+
+    if (is_null($this->company)) {
+      throw new SdkException('Company required');
     }
 
     if (is_null($this->total)) {
@@ -199,7 +230,8 @@ class Receipt implements RequestPart
     }
 
     return [
-      'attributes' => $this->attributes->toArray(),
+      'client' => $this->client->toArray(),
+      'company' => $this->company->toArray(),
       'items' => array_map(function (ReceiptItem $item) {
         return $item->toArray();
       }, $this->items),

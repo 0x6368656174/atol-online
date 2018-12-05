@@ -17,52 +17,15 @@ use function is_null;
 use function preg_match;
 
 /**
- * Атрибуты чека.
+ * Атрибуты клиента.
  */
-class ReceiptAttributes implements RequestPart
+class ReceiptClient implements RequestPart
 {
-  /** @var string */
-  private $sno = null;
-
   /** @var string|null */
   private $email = null;
 
   /** @var string|null */
   private $phone = null;
-
-  /**
-   * Возвращает систему налогообложения.
-   *
-   * @return string
-   */
-  public function getSno(): string
-  {
-    return $this->sno;
-  }
-
-  /**
-   * Устанавливает систему налогообложения.
-   *
-   * Перечисление со значениями:
-   * - SnoSystem::OSN – общая СН;
-   * - SnoSystem::USN_INCOME – упрощенная СН (доходы);
-   * - SnoSystem::USN_INCOME_OUTCOME – упрощенная СН (доходы минус расходы);
-   * - SnoSystem::ENVD – единый налог на вмененный доход;
-   * - SnoSystem::ESN – единый сельскохозяйственный налог;
-   * - SnoSystem::PATENT – патентная СН
-   *
-   * Поле необязательно, если у организации один тип налогообложения.
-   *
-   * @param string
-   *
-   * @return ReceiptAttributes
-   */
-  public function setSno($sno): self
-  {
-    $this->sno = $sno;
-
-    return $this;
-  }
 
   /**
    * Возвращает электронную почту покупателя.
@@ -83,7 +46,7 @@ class ReceiptAttributes implements RequestPart
    *
    * @param null|string $email
    *
-   * @return ReceiptAttributes
+   * @return $this
    */
   public function setEmail(?string $email): self
   {
@@ -119,7 +82,7 @@ class ReceiptAttributes implements RequestPart
    *
    * @param null|string $phone
    *
-   * @return ReceiptAttributes
+   * @return $this
    */
   public function setPhone(?string $phone): self
   {
@@ -143,10 +106,6 @@ class ReceiptAttributes implements RequestPart
     }
 
     $result = [];
-
-    if (!is_null($this->sno)) {
-      $result['sno'] = $this->sno;
-    }
 
     if (!is_null($this->email)) {
       $result['email'] = $this->email;
