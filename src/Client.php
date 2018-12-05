@@ -22,7 +22,7 @@ class Client
   private $host = 'https://online.atol.ru';
 
   /** @var string */
-  private $apiVersion = 'v3';
+  private $apiVersion = 'v4';
 
   /** @var string */
   private $token;
