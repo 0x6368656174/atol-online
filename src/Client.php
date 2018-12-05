@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use ItQuasar\AtolOnline\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\SimpleCache\CacheInterface;
 
 class Client
 {
@@ -33,18 +34,23 @@ class Client
   /** @var LoggerInterface */
   private $logger;
 
+  /** @var CacheInterface */
+  private $cache;
+
   /**
-   * @param string          $login     Shop ID
-   * @param string          $password  Secret key
-   * @param string          $groupCode Group code
-   * @param LoggerInterface $logger    PSR Logger
+   * @param string $login Shop ID
+   * @param string $password Secret key
+   * @param string $groupCode Group code
+   * @param CacheInterface $cache
+   * @param LoggerInterface $logger PSR Logger
    */
-  public function __construct(string $login, string $password, string $groupCode, LoggerInterface $logger = null)
+  public function __construct(string $login, string $password, string $groupCode, CacheInterface $cache, LoggerInterface $logger = null)
   {
     $this->groupCode = $groupCode;
 
     $this->token = $this->getToken($login, $password);
     $this->logger = $logger;
+    $this->cache = $cache;
   }
 
   /**
@@ -78,7 +84,7 @@ class Client
         'error' => $error['text'],
         'response' => $response,
       ]);
-      throw new ClientException($error['text']);
+      throw new ClientException($error['error_id'].' - '.$error['text']);
     }
 
     return $response['uuid'];
@@ -109,13 +115,18 @@ class Client
    */
   private function sendRequest(string $path, ?array $data = null): array
   {
-    $path = sprintf('possystem/%s/%s/%s?tokenid=%s', $this->apiVersion, $this->groupCode, $path, $this->token);
+    $path = sprintf('possystem/%s/%s/%s', $this->apiVersion, $this->groupCode, $path);
 
     return $this->sendRawRequest($path, $data);
   }
 
   private function getToken(string $login, string $password): string
   {
+    $CACHE_KEY = 'atol.token';
+    if($this->cache->has($CACHE_KEY)) {
+      return (string)$this->cache->get($CACHE_KEY);
+    }
+
     $data = [
       'login' => $login,
       'pass' => $password,
@@ -125,16 +136,19 @@ class Client
 
     $response = $this->sendRawRequest($path, $data);
 
-    if ($response['code'] > 1) {
-      $error = $response['text'];
-      $this->log(LogLevel::WARNING, 'getToken error: {error} {response}', [
-        'error' => $error,
+    $error = $response['error'];
+    if (null !== $error) {
+      $this->log(LogLevel::WARNING, 'error: {error} {response}', [
+        'error' => $error['text'],
         'response' => $response,
       ]);
-      throw new ClientException($error);
+      throw new ClientException($error['error_id'].' - '.$error['text']);
     }
 
-    return $response['token'];
+    $token = $response['token'];
+    $this->cache->set($CACHE_KEY, $token, 3600 * 24);
+
+    return $token;
   }
 
   /**
@@ -157,7 +171,8 @@ class Client
     $url = sprintf('%s/%s', $this->host, $path);
 
     $headers = [
-      'Accept: application/json',
+      'Accept: application/json; charset=utf-8',
+      'Token: '.$this->token,
     ];
 
     if ('POST' == $method) {
