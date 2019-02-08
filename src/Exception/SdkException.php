@@ -13,6 +13,9 @@ namespace ItQuasar\AtolOnline\Exception;
 
 use RuntimeException;
 
+/**
+ * Ошибка SDK
+ */
 class SdkException extends RuntimeException
 {
 }

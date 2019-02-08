@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
@@ -9,36 +6,34 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ItQuasar\AtolOnline;
 
 use InvalidArgumentException;
 use ItQuasar\AtolOnline\Exception\SdkException;
 use function is_null;
-use function preg_match;
 
 /**
  * Атрибуты компании.
  */
-class ReceiptCompany implements RequestPart
+class CorrectionCompany implements RequestPart
 {
   /** @var string */
-  private $sno = null;
+  protected $sno = null;
 
   /** @var string|null */
-  private $email = null;
-
-  /** @var string|null */
-  private $inn = null;
+  protected $inn = null;
 
   /** @var null string|null */
-  private $paymentAddress = null;
+  protected $paymentAddress = null;
 
   /**
    * Возвращает систему налогообложения.
    *
-   * @return string
+   * @return null|string
    */
-  public function getSno(): string
+  public function getSno(): ?string
   {
     return $this->sno;
   }
@@ -47,20 +42,20 @@ class ReceiptCompany implements RequestPart
    * Устанавливает систему налогообложения.
    *
    * Перечисление со значениями:
-   * - SnoSystem::OSN – общая СН;
-   * - SnoSystem::USN_INCOME – упрощенная СН (доходы);
-   * - SnoSystem::USN_INCOME_OUTCOME – упрощенная СН (доходы минус расходы);
-   * - SnoSystem::ENVD – единый налог на вмененный доход;
-   * - SnoSystem::ESN – единый сельскохозяйственный налог;
-   * - SnoSystem::PATENT – патентная СН
+   * - @see SnoSystem::OSN – общая СН;
+   * - @see SnoSystem::USN_INCOME – упрощенная СН (доходы);
+   * - @see SnoSystem::USN_INCOME_OUTCOME – упрощенная СН (доходы минус расходы);
+   * - @see SnoSystem::ENVD – единый налог на вмененный доход;
+   * - @see SnoSystem::ESN – единый сельскохозяйственный налог;
+   * - @see SnoSystem::PATENT – патентная СН
    *
    * Поле необязательно, если у организации один тип налогообложения.
    *
-   * @param string
+   * @param null|string
    *
    * @return $this
    */
-  public function setSno($sno): self
+  public function setSno(?string $sno): self
   {
     $this->sno = $sno;
 
@@ -70,9 +65,9 @@ class ReceiptCompany implements RequestPart
   /**
    * Возвращает ИНН организации.
    *
-   * @return null|string
+   * @return string
    */
-  public function getInn(): ?string
+  public function getInn(): string
   {
     return $this->inn;
   }
@@ -85,12 +80,12 @@ class ReceiptCompany implements RequestPart
    *
    * Допустимое количество символов 10 или 12
    *
-   * @param null|string $inn
+   * @param string $inn
    *
    * @return $this
    */
-  public function setInn(?string $inn): self {
-    $length = strlen($inn);
+  public function setInn(string $inn): self {
+    $length = mb_strlen($inn);
     if (10 !== $length && 12 !== $length) {
       throw new InvalidArgumentException('Inn must be length = 10 or length = 12');
     }
@@ -103,7 +98,7 @@ class ReceiptCompany implements RequestPart
   /**
    * Возвращает адрес места расчетов
    *
-   * @return string|null
+   * @return string
    */
   public function getPaymentAddress(): ?string
   {
@@ -118,12 +113,12 @@ class ReceiptCompany implements RequestPart
    *
    * Максимальная длина строки - 256 символов
    *
-   * @param string|null $paymentAddress
+   * @param string $paymentAddress
    *
    * @return $this
    */
-  public function setPaymentAddress(?string $paymentAddress): self{
-    if (strlen($paymentAddress) > 256) {
+  public function setPaymentAddress(?string $paymentAddress): self {
+    if (mb_strlen($paymentAddress) > 256) {
       throw new InvalidArgumentException('Payment address too big. Max length size = 256');
     }
 
@@ -132,42 +127,8 @@ class ReceiptCompany implements RequestPart
     return $this;
   }
 
-  /**
-   * Возвращает электронную почту отправителя.
-   *
-   * @return null|string
-   */
-  public function getEmail(): ?string
-  {
-    return $this->email;
-  }
-
-  /**
-   * Устанавливает электронную почту отправителя.
-   *
-   * Максимальная длина строки – 64 символа
-   *
-   * @param null|string $email
-   *
-   * @return $this
-   */
-  public function setEmail(?string $email): self
-  {
-    if (strlen($email) > 64) {
-      throw new InvalidArgumentException('Email too big. Max length size = 64');
-    }
-
-    $this->email = $email;
-
-    return $this;
-  }
-
   public function toArray(): array
   {
-    if (is_null($this->email)) {
-      throw new SdkException('Email required');
-    }
-
     if (is_null($this->inn)) {
       throw new SdkException('Inn required');
     }
@@ -183,10 +144,6 @@ class ReceiptCompany implements RequestPart
 
     if (!is_null($this->sno)) {
       $result['sno'] = $this->sno;
-    }
-
-    if (!is_null($this->email)) {
-      $result['email'] = $this->email;
     }
 
     return $result;

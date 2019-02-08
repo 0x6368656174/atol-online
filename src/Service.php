@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
@@ -9,11 +6,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ItQuasar\AtolOnline;
 
 use InvalidArgumentException;
 use function is_null;
-use function strlen;
+use function mb_strlen;
 
 /**
  * Служебный раздел.
@@ -44,11 +43,11 @@ class Service implements RequestPart
    *
    * @param null|string $callbackUrl
    *
-   * @return Service
+   * @return $this
    */
   public function setCallbackUrl(?string $callbackUrl): self
   {
-    if (strlen($callbackUrl) > 256) {
+    if (mb_strlen($callbackUrl) > 256) {
       throw new InvalidArgumentException('CallbackUrl too big. Max length size = 256');
     }
 

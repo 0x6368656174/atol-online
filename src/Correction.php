@@ -1,13 +1,12 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
@@ -21,35 +20,20 @@ use function count;
  */
 class Correction implements RequestPart
 {
-  /** @var CorrectionAttributes */
-  private $attributes = null;
-
   /** @var Payment[] */
   private $payments = [];
 
-  /**
-   * Возвращает атрибуты коррекции.
-   *
-   * @return CorrectionAttributes
-   */
-  public function getAttributes(): CorrectionAttributes
-  {
-    return $this->attributes;
-  }
+  /** @var null|CorrectionCompany */
+  private $company = null;
 
-  /**
-   * Устанавливает атрибуты коррекции.
-   *
-   * @param CorrectionAttributes $attributes
-   *
-   * @return Correction
-   */
-  public function setAttributes(CorrectionAttributes $attributes): self
-  {
-    $this->attributes = $attributes;
+  /** @var null|CorrectionInfo */
+  private $correctionInfo = null;
 
-    return $this;
-  }
+  /** @var Vat[]  */
+  private $vats = [];
+
+  /** @var null|string */
+  private $cashier = null;
 
   /**
    * Возвращает оплату.
@@ -68,7 +52,7 @@ class Correction implements RequestPart
    *
    * @param Payment[] $payments
    *
-   * @return Correction
+   * @return $this
    */
   public function setPayments(array $payments): self
   {
@@ -97,21 +81,168 @@ class Correction implements RequestPart
     $this->payments[] = $payment;
   }
 
+  /**
+   * Возвращает атрибуты компании.
+   *
+   * @return CorrectionCompany
+   */
+  public function getCompany(): CorrectionCompany
+  {
+    return $this->company;
+  }
+
+  /**
+   * Устанавливает атрибуты компании.
+   *
+   * @param CorrectionCompany $company
+   *
+   * @return $this
+   */
+  public function setCompany(CorrectionCompany $company): self
+  {
+    $this->company = $company;
+
+    return $this;
+  }
+
+  /**
+   * Возвращает коррекцию.
+   *
+   * @return CorrectionInfo
+   */
+  public function getCorrectionInfo(): CorrectionInfo
+  {
+    return $this->correctionInfo;
+  }
+
+  /**
+   * Устанавлиает коррекцию.
+   *
+   * @param CorrectionInfo $correctionInfo
+   *
+   * @return $this
+   */
+  public function setCorrectionInfo(CorrectionInfo $correctionInfo): self
+  {
+    $this->correctionInfo = $correctionInfo;
+
+    return $this;
+  }
+
+  /**
+   * Возвращает атрибуты налогов на чек коррекции.
+   *
+   * @return Vat[]
+   */
+  public function getVats(): array {
+    return $this->vats;
+  }
+
+  /**
+   * Устанавлиает атрибуты налога на чек коррекции.
+   *
+   * Ограничение по количеству от 1 до 6.
+   *
+   * Необходимо передать либо сумму налога на позицию, либо сумму налога на чек. Если будет переданы и сумма налога
+   * на позицию и сумма налога на чек, сервис учтет только сумму налога на чек.
+   *
+   * @param array $vats
+   *
+   * @return $this
+   */
+  public function setVats(array $vats): self {
+    if (0 === count($vats) || count($vats) > 6) {
+      throw new InvalidArgumentException('Vats count must be less then 7');
+    }
+
+    $this->vats = $vats;
+
+    return $this;
+  }
+
+  /**
+   * Добавляет атрибут налога на чек коррекции.
+   *
+   * Ограничение по количеству от 1 до 6.
+   *
+   * Необходимо передать либо сумму налога на позицию, либо сумму налога на чек. Если будет переданы и сумма налога
+   * на позицию и сумма налога на чек, сервис учтет только сумму налога на чек.
+   *
+   * @param Vat $vat
+   *
+   * @return $this
+   */
+  public function addVat(Vat $vat): self {
+    if (count($this->vats) === 6) {
+      throw new InvalidArgumentException('Vats full. Max payments count = 6');
+    }
+
+    $this->vats[] = $vat;
+
+    return $this;
+  }
+
+  /**
+   * Возвращает ФИО кассира.
+   *
+   * @return string|null
+   */
+  public function getCashier(): ?string  {
+    return $this->cashier;
+  }
+
+  /**
+   * Устанавливает ФИО кассира.
+   *
+   * Максимальная длина строки – 64 символа.
+   *
+   * @param string|null $cashier
+   *
+   * @return $this
+   */
+  public function setCashier(?string $cashier): self {
+    if (mb_strlen($cashier) > 64) {
+      throw new InvalidArgumentException('Cashier too big. Max length size = 64');
+    }
+
+    $this->cashier = $cashier;
+
+    return $this;
+  }
+
   public function toArray(): array
   {
-    if (is_null($this->attributes)) {
-      throw new SdkException('Attributes required');
+    if (is_null($this->company)) {
+      throw new SdkException('Company required');
     }
 
     if (0 == count($this->payments)) {
       throw new SdkException('More then one payment required');
     }
 
-    return [
-      'attributes' => $this->attributes->toArray(),
+    if (0 == count($this->vats)) {
+      throw new SdkException('More then one vat required');
+    }
+
+    if (is_null($this->correctionInfo)) {
+      throw new SdkException('Correction info required');
+    }
+
+    $result = [
+      'company' => $this->company->toArray(),
       'payments' => array_map(function (Payment $payment) {
         return $payment->toArray();
       }, $this->payments),
+      'correction_info' => $this->correctionInfo->toArray(),
+      'vats' => array_map(function (Vat $vat) {
+        return $vat->toArray();
+      }, $this->vats),
     ];
+
+    if (!is_null($this->cashier)) {
+      $result['cashier'] = $this->cashier;
+    }
+
+    return $result;
   }
 }

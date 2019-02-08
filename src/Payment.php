@@ -1,13 +1,12 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
@@ -19,6 +18,9 @@ use ItQuasar\AtolOnline\Exception\SdkException;
  */
 class Payment implements RequestPart
 {
+  /** @var int Электронный вид оплаты */
+  const TYPE_ELECTRONIC = 1;
+
   /** @var int */
   private $type = 1;
 
@@ -39,12 +41,12 @@ class Payment implements RequestPart
    * Устанавливает вид оплаты.
    *
    * Возможные значения:
-   * - 1 – электронный;
+   * - @see Payment::TYPE_ELECTRONIC – электронный;
    * - 2 – 9 – расширенные типы оплаты. Для каждого фискального типа оплаты можно указать расширенный тип оплаты.
    *
    * @param int $type
    *
-   * @return Payment
+   * @return $this
    */
   public function setType(int $type): self
   {
@@ -70,7 +72,7 @@ class Payment implements RequestPart
    *
    * @param float $sum
    *
-   * @return Payment
+   * @return $this
    */
   public function setSum(float $sum): self
   {
