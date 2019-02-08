@@ -6,15 +6,10 @@
 Все классы сделаны таким образом, чтоб их названия и свойства максимально соответствовали [официальной документации
 АТОЛ Онлайн v4](https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf).
 
-## Установка
-
-Пакет доступен для установки при помощи пакетного менеджера Composer:
-
-```.sh
-$ composer require it-quasar/atol-online
-```
-
-### Зависимости
+## Требования
+- PHP 7.1 или выше
+- PHP расширение cURL (ext-curl)
+- PHP расширение JSON (ext-json)
 
 Библиотека использует в своей работы стандартный PSR-совместимый кеш (см. http://www.php-cache.com) для хранения 
 временного ключа доступа к API АТОЛ Онлайн.
@@ -24,6 +19,14 @@ $ composer require it-quasar/atol-online
 
 ```.sh
 $ composer require cache/filesystem-adapter
+```
+
+## Установка
+
+Пакет доступен для установки при помощи пакетного менеджера Composer:
+
+```.sh
+$ composer require it-quasar/atol-online
 ```
 
 ## Использование
