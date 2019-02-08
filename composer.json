@@ -1,6 +1,6 @@
 {
   "name": "it-quasar/atol-online",
-  "version": "1.0.11",
+  "version": "4.0.0",
   "description": "Библиотека для работы с АТОЛ Онлайн",
   "type": "library",
   "license": "GPL-3.0-or-later",
@@ -24,7 +24,8 @@
     "php": ">=7.1.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "psr/log": "^1.0"
+    "psr/log": "^1.0",
+    "psr/cache": "^1.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.12",

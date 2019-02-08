@@ -1,10 +1,10 @@
 # it-quasar/atol-online
 
-Библиотека для работы с [АТОЛ Онлайн](https://online.atol.ru/).
+Библиотека для работы с [АТОЛ Онлайн v4](https://online.atol.ru/).
 
 Библиотека содержит набор классов для формирования запросов в АТОЛ Онлайн и обработки ответов из АТОЛ Онлайн.
 Все классы сделаны таким образом, чтоб их названия и свойства максимально соответствовали [официальной документации
-АТОЛ Онлайн](https://online.atol.ru/files/%D0%90%D0%A2%D0%9E%D0%9B%20%D0%9E%D0%BD%D0%BB%D0%B0%D0%B8%CC%86%D0%BD._%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D0%B0.pdf).
+АТОЛ Онлайн v4](https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf).
 
 ## Установка
 
@@ -21,15 +21,21 @@ $ composer require it-quasar/atol-online
 ```.php
 <?php
 
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+
+use ItQuasar\AtolOnline\AtolClient;
 use ItQuasar\AtolOnline\Client;
+use ItQuasar\AtolOnline\Company;
+use ItQuasar\AtolOnline\Item;
 use ItQuasar\AtolOnline\Payment;
 use ItQuasar\AtolOnline\Receipt;
-use ItQuasar\AtolOnline\ReceiptAttributes;
-use ItQuasar\AtolOnline\ReceiptItem;
 use ItQuasar\AtolOnline\Sell;
 use ItQuasar\AtolOnline\Service;
 use ItQuasar\AtolOnline\SnoSystem;
-use ItQuasar\AtolOnline\TaxSystem;
+use ItQuasar\AtolOnline\Vat;
+use ItQuasar\AtolOnline\VatType;
 
 // Создадим время заказа
 $timestamp = new DateTime();
@@ -39,57 +45,64 @@ $timestamp
   
 // Создадим запрос на продажу
 // Параметры запроса соответствуют параметрам запроса, описанным в 
-// https://online.atol.ru/files/АТОЛ%20Онлайн._Описание%20протокола.pdf
+// https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf
 $request = new Sell();
 $request
   ->setExternalId('17052917561851307')
   ->setTimestamp($timestamp);
 
-// Создадим сервисный раздел запроса
-$service = new Service();
-$service
-  ->setCallbackUrl('http://example.com/callback')
-  ->setInn('331122667723')
-  ->setPaymentAddress('http://example.com');
-
-// Добавим в запрос сервисный раздел
-$request->setService($service);
-
 // Создадим чек
 $receipt = new Receipt();
 $receipt->setTotal(7612);
 
-// Добавим в запрос чек
+// Установми чек для запроса
 $request->setReceipt($receipt);
 
-// Создадим атрибуты чека
-$attributes = new ReceiptAttributes();
-$attributes
-  ->setEmail('mail@example.com')
-  ->setSno(SnoSystem::OSN);
+// Создадим атрибуты клиента
+$client = new Client();
+$client->setEmail('client@example.com');
 
-// Добавим в чек атрибуты
-$receipt->setAttributes($attributes);
+// Установим атрибуты клиента для чека
+$receipt->setClient($client);
+
+// Создадим атрибуты компании
+$company = new Company();
+$company
+  ->setEmail('shop@example.com')
+  ->setSno(SnoSystem::OSN)
+  ->setInn('331122667723')
+  ->setPaymentAddress('http://example.com');
+  
+// Установим атрибуты компании для чека
+$receipt->setCompany($company);
+
+// Создадим атрибут налога под 20% НДС
+$vat20 = new Vat();
+$vat20->setType(VatType::VAT20);
 
 // Создадим первую позицию
-$item1 = new ReceiptItem('Название товара 1');
+$item1 = new Item('Название товара 1');
 $item1
   ->setPrice(5000)
   ->setQuantity(1)
   ->setSum(5000)
-  ->setTax(TaxSystem::VAT10)
-  ->setTaxSum(454.55);
+  ->setVat($vat20)
+  ->setPaymentObject(PaymentObject::COMMODITY)
+  ->setPaymentMethod(PaymentMethod::FULL_PAYMENT);
+  
 
 // Добавим в чек первую позицию
 $receipt->addItem($item1);
 
 // Создадим вторую позицию
-$item2 = new ReceiptItem('Название товара 2');
+$item2 = new Item('Название товара 2');
 $item2
   ->setPrice(1456.21)
   ->setQuantity(2)
-  ->setSum(2612.42)
-  ->setTax(TaxSystem::VAT118)
+  ->setVat($vat20)
+  ->setPaymentObject(PaymentObject::COMMODITY)
+  ->setPaymentMethod(PaymentMethod::FULL_PAYMENT)
+  ->setMeasurementUnit('кг');
 
 // Добавим в чек вторую позицию
 $receipt->addItem($item2);
@@ -103,6 +116,19 @@ $payment
 // Добавим в чек оплату
 $receipt->addPayment($payment);
 
+// Создадим служебный раздел
+$service = new Service();
+$service->setCallbackUrl('http://example.com/payment-result');
+
+// Установим служебный раздел для запроса на продажу
+$request->setService($service);
+
+// PSR-совместимый интерфейс кеширования, см. http://www.php-cache.com
+$filesystemAdapter = new Local(__DIR__.'/');
+$filesystem = new Filesystem($filesystemAdapter);
+$pool = new FilesystemCachePool($filesystem);
+$cache = $pool->getItem('atol');
+
 // PSR-совместимый логгер (опциональный параметр)
 $logger = null;
 
@@ -113,7 +139,7 @@ $passwor = 'v2AfscRjr';
 $groupCode = 'netletest_8491';
 
 // Создадим клиент
-$client = new Client($login, $password, $groupCode, $logger);
+$client = new AtolClient($login, $password, $groupCode, $cache, $logger);
 
 // Отравим запрос
 // $uuid будет содержать UUID документа в системе АТОЛ Онлайн
@@ -134,7 +160,18 @@ $uuid = $client->send($request);
 ```.php
 <?php
 
-use ItQuasar\AtolOnline\Client;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+
+use ItQuasar\AtolOnline\AtolClient;
+use ItQuasar\AtolOnline\Report;
+
+// PSR-совместимый интерфейс кеширования, см. http://www.php-cache.com
+$filesystemAdapter = new Local(__DIR__.'/');
+$filesystem = new Filesystem($filesystemAdapter);
+$pool = new FilesystemCachePool($filesystem);
+$cache = $pool->getItem('atol');
 
 // PSR-совместимый логгер (опциональный параметр)
 $logger = null;
@@ -146,7 +183,7 @@ $passwor = 'v2AfscRjr';
 $groupCode = 'netletest_8491';
 
 // Создадим клиент
-$client = new Client($login, $password, $groupCode, $logger);
+$client = new AtolClient($login, $password, $groupCode, $cache, $logger);
 
 // UUID документа, полученный при регистрации документа в системе АТОЛ Онлайн
 $uuid = '...';

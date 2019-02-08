@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
@@ -9,8 +6,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ItQuasar\AtolOnline;
 
+/**
+ * Часть ответа
+ */
 interface ResponsePart
 {
   /**
