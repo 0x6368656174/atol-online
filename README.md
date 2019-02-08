@@ -4,7 +4,7 @@
 
 Библиотека содержит набор классов для формирования запросов в АТОЛ Онлайн и обработки ответов из АТОЛ Онлайн.
 Все классы сделаны таким образом, чтоб их названия и свойства максимально соответствовали [официальной документации
-АТОЛ Онлайн v4](https://raw.githubusercontent.com/0x6368656174/atol-online/master/documents/Atol-Online-v4.6.pdf).
+АТОЛ Онлайн v4](https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf).
 
 ## Установка
 
@@ -21,19 +21,20 @@ $ composer require it-quasar/atol-online
 ```.php
 <?php
 
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use Cache\Adapter\Filesystem\FilesystemCachePool;
+
+use ItQuasar\AtolOnline\AtolClient;
 use ItQuasar\AtolOnline\Client;
+use ItQuasar\AtolOnline\Company;
+use ItQuasar\AtolOnline\Item;
 use ItQuasar\AtolOnline\Payment;
 use ItQuasar\AtolOnline\Receipt;
-use ItQuasar\AtolOnline\ReceiptClient;
-use ItQuasar\AtolOnline\Company;
-use ItQuasar\AtolOnline\ReceiptItem;
-use ItQuasar\AtolOnline\Report;
 use ItQuasar\AtolOnline\Sell;
 use ItQuasar\AtolOnline\Service;
 use ItQuasar\AtolOnline\SnoSystem;
+use ItQuasar\AtolOnline\Vat;
 use ItQuasar\AtolOnline\VatType;
 
 // Создадим время заказа
@@ -44,7 +45,7 @@ $timestamp
   
 // Создадим запрос на продажу
 // Параметры запроса соответствуют параметрам запроса, описанным в 
-// https://raw.githubusercontent.com/0x6368656174/atol-online/master/documents/Atol-Online-v4.6.pdf
+// https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf
 $request = new Sell();
 $request
   ->setExternalId('17052917561851307')
@@ -58,7 +59,7 @@ $receipt->setTotal(7612);
 $request->setReceipt($receipt);
 
 // Создадим атрибуты клиента
-$client = new ReceiptClient();
+$client = new Client();
 $client->setEmail('client@example.com');
 
 // Установим атрибуты клиента для чека
@@ -80,7 +81,7 @@ $vat20 = new Vat();
 $vat20->setType(VatType::VAT20);
 
 // Создадим первую позицию
-$item1 = new ReceiptItem('Название товара 1');
+$item1 = new Item('Название товара 1');
 $item1
   ->setPrice(5000)
   ->setQuantity(1)
@@ -94,7 +95,7 @@ $item1
 $receipt->addItem($item1);
 
 // Создадим вторую позицию
-$item2 = new ReceiptItem('Название товара 2');
+$item2 = new Item('Название товара 2');
 $item2
   ->setPrice(1456.21)
   ->setQuantity(2)
@@ -138,7 +139,7 @@ $passwor = 'v2AfscRjr';
 $groupCode = 'netletest_8491';
 
 // Создадим клиент
-$client = new Client($login, $password, $groupCode, $cache, $logger);
+$client = new AtolClient($login, $password, $groupCode, $cache, $logger);
 
 // Отравим запрос
 // $uuid будет содержать UUID документа в системе АТОЛ Онлайн
@@ -159,7 +160,12 @@ $uuid = $client->send($request);
 ```.php
 <?php
 
-use ItQuasar\AtolOnline\Client;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+
+use ItQuasar\AtolOnline\AtolClient;
+use ItQuasar\AtolOnline\Report;
 
 // PSR-совместимый интерфейс кеширования, см. http://www.php-cache.com
 $filesystemAdapter = new Local(__DIR__.'/');
@@ -177,7 +183,7 @@ $passwor = 'v2AfscRjr';
 $groupCode = 'netletest_8491';
 
 // Создадим клиент
-$client = new Client($login, $password, $groupCode, $cache, $logger);
+$client = new AtolClient($login, $password, $groupCode, $cache, $logger);
 
 // UUID документа, полученный при регистрации документа в системе АТОЛ Онлайн
 $uuid = '...';

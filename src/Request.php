@@ -15,5 +15,10 @@ namespace ItQuasar\AtolOnline;
  */
 interface Request extends RequestPart
 {
+  /**
+   * Возврщает операцию
+   *
+   * @return string
+   */
   public function getOperation(): string;
 }
