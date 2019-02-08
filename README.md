@@ -1,8 +1,8 @@
 # it-quasar/atol-online
 
-Библиотека для работы с [АТОЛ Онлайн v4](https://online.atol.ru/).
+Библиотека на PHP для работы с [АТОЛ Онлайн v4](https://online.atol.ru/).
 
-Библиотека содержит набор классов для формирования запросов в АТОЛ Онлайн и обработки ответов из АТОЛ Онлайн.
+Библиотека содержит набор классов на PHP для формирования запросов в АТОЛ Онлайн и обработки ответов из АТОЛ Онлайн.
 Все классы сделаны таким образом, чтоб их названия и свойства максимально соответствовали [официальной документации
 АТОЛ Онлайн v4](https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf).
 
@@ -14,6 +14,18 @@
 $ composer require it-quasar/atol-online
 ```
 
+### Зависимости
+
+Библиотека использует в своей работы стандартный PSR-совместимый кеш (см. http://www.php-cache.com) для хранения 
+временного ключа доступа к API АТОЛ Онлайн.
+
+Поддерживается любой PSR-совместимый кеш, например, можно использовать файловый кеш (https://github.com/php-cache/filesystem-adapter).
+Для этого его необходимо установить при помощи Composer:
+
+```.sh
+$ composer require cache/filesystem-adapter
+```
+
 ## Использование
 
 Для регистрации документа в ККТ необходимо выполнить следующий код:
@@ -21,6 +33,7 @@ $ composer require it-quasar/atol-online
 ```.php
 <?php
 
+// Классы PSR-совместимого кеша (в данном примере используется Filesystem кеш, может быть любой другой)
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -124,6 +137,7 @@ $service->setCallbackUrl('http://example.com/payment-result');
 $request->setService($service);
 
 // PSR-совместимый интерфейс кеширования, см. http://www.php-cache.com
+// В данном случае используется Filesystem кеш, настроим его пул и получим итем для кеширования
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);
 $pool = new FilesystemCachePool($filesystem);
@@ -160,6 +174,7 @@ $uuid = $client->send($request);
 ```.php
 <?php
 
+// Классы PSR-совместимого кеша (в данном примере используется Filesystem кеш, может быть любой другой)
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -168,6 +183,7 @@ use ItQuasar\AtolOnline\AtolClient;
 use ItQuasar\AtolOnline\Report;
 
 // PSR-совместимый интерфейс кеширования, см. http://www.php-cache.com
+// В данном случае используется Filesystem кеш, настроим его пул и получим итем для кеширования
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);
 $pool = new FilesystemCachePool($filesystem);
@@ -191,6 +207,6 @@ $uuid = '...';
 // Отравим запрос на получение статуса обработки.
 // $report будет содержать ItQuasar/AtolOnline/Report,
 // который соответствует структуре описанной в 
-// https://online.atol.ru/files/АТОЛ%20Онлайн._Описание%20протокола.pdf
+// https://raw.githubusercontent.com/0x6368656174/atol-online/master/api/atol-online-v4.6.pdf
 $report = $client->getReport($uuid);
 ```
