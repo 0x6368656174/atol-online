@@ -127,7 +127,7 @@ $receipt->addItem($item2);
 $payment = new Payment();
 $payment
   ->setSum(7612)
-  ->setType(1);
+  ->setType(Payment::TYPE_ELECTRONIC);
 
 // Добавим в чек оплату
 $receipt->addPayment($payment);
