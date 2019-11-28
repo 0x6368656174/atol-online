@@ -1,13 +1,12 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
@@ -55,11 +54,11 @@ class SellCorrection implements Request
    *
    * @param string $externalId
    *
-   * @return SellCorrection
+   * @return $this
    */
   public function setExternalId(string $externalId): self
   {
-    if (strlen($externalId) > 256) {
+    if (mb_strlen($externalId) > 256) {
       throw new InvalidArgumentException('ExternalId too big. Max length size = 256');
     }
 
@@ -83,7 +82,7 @@ class SellCorrection implements Request
    *
    * @param Correction $correction
    *
-   * @return SellCorrection
+   * @return $this
    */
   public function setCorrection(Correction $correction): self
   {
@@ -107,7 +106,7 @@ class SellCorrection implements Request
    *
    * @param Service $service
    *
-   * @return SellCorrection
+   * @return $this
    */
   public function setService(Service $service): self
   {
@@ -131,7 +130,7 @@ class SellCorrection implements Request
    *
    * @param DateTime $timestamp
    *
-   * @return SellCorrection
+   * @return $this
    */
   public function setTimestamp(DateTime $timestamp): self
   {

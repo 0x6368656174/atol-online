@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
@@ -9,217 +6,114 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ItQuasar\AtolOnline;
 
 use InvalidArgumentException;
-use ItQuasar\AtolOnline\Exception\ClientException;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
-use Psr\SimpleCache\CacheInterface;
+use ItQuasar\AtolOnline\Exception\SdkException;
+use function is_null;
+use function preg_match;
 
-class Client
+/**
+ * Атрибуты клиента.
+ */
+class Client implements RequestPart
 {
-  /** @var string */
-  private $host = 'https://online.atol.ru';
+  /** @var string|null */
+  private $email = null;
 
-  /** @var string */
-  private $apiVersion = 'v4';
-
-  /** @var string */
-  private $token;
-
-  /** @var string */
-  private $groupCode;
-
-  /** @var LoggerInterface */
-  private $logger;
-
-  /** @var CacheInterface */
-  private $cache;
+  /** @var string|null */
+  private $phone = null;
 
   /**
-   * @param string $login Shop ID
-   * @param string $password Secret key
-   * @param string $groupCode Group code
-   * @param CacheInterface $cache
-   * @param LoggerInterface $logger PSR Logger
+   * Возвращает электронную почту покупателя.
+   *
+   * @return null|string
    */
-  public function __construct(string $login, string $password, string $groupCode, CacheInterface $cache, LoggerInterface $logger = null)
+  public function getEmail(): ?string
   {
-    $this->groupCode = $groupCode;
-
-    $this->logger = $logger;
-    $this->cache = $cache;
-    $this->token = $this->getToken($login, $password);
+    return $this->email;
   }
 
   /**
-   * @param string $value
+   * Устанавливает электронную почту покупателя.
    *
-   * @return Client
+   * Максимальная длина строки – 64 символа
+   *
+   * В запросе обязательно должно быть заполнено хотя бы одно из полей: email или phone.
+   *
+   * @param null|string $email
+   *
+   * @return $this
    */
-  public function setHost($value): self
+  public function setEmail(?string $email): self
   {
-    $this->host = $value;
+    if (mb_strlen($email) > 64) {
+      throw new InvalidArgumentException('Email too big. Max length size = 64');
+    }
+
+    $this->email = $email;
 
     return $this;
   }
 
   /**
-   * Отпаравляет запрос на регистрацию документа в АТОЛ Онлайн.
+   * Возвращает Телефон покупателя.
    *
-   * Возвращает уникальный идентификатор, присвоенный данному документу.
-   *
-   * @param Request $request Запрос
-   *
-   * @return string Уникальный идентификатор, присвоенный данному документу
+   * @return null|string
    */
-  public function send(Request $request): string
+  public function getPhone(): ?string
   {
-    $response = $this->sendRequest($request->getOperation(), $request->toArray());
-
-    $error = $response['error'];
-    if (null !== $error) {
-      $this->log(LogLevel::WARNING, 'error: {error} {response}', [
-        'error' => $error['text'],
-        'response' => $response,
-      ]);
-      throw new ClientException($error['error_id'].' - '.$error['text']);
-    }
-
-    return $response['uuid'];
+    return $this->phone;
   }
 
   /**
-   * Получает статуса обработки документа из АТОЛ Онлайн.
+   * Устанавливает телефон покупателя.
    *
-   * Возвращает обработанный ответ.
+   *Номер телефона необходимо передать вместе с кодом страны без пробелов и дополнительных символов, кроме
+   * символа «+» (номер «+371 2 1234567» необходимо передать как «+37121234567»). Если номер телефона относится к России
+   * (префикс «+7»), то значение можно передать без префикса (номер «+7 925 1234567» можно передать как «9251234567»).
    *
-   * @param string $uuid Уникальный идентификатор, присвоенный документу после выполнения запроса на регистрацию
+   * Максимальная длина строки – 64 символа.
    *
-   * @return Report
+   * В запросе обязательно должно быть заполнено хотя бы одно из полей: email или phone.
+   *
+   * @param null|string $phone
+   *
+   * @return $this
    */
-  public function getReport(string $uuid): Report
+  public function setPhone(?string $phone): self
   {
-    $path = sprintf('report/%s', $uuid);
-    $response = $this->sendRequest($path);
+    if (mb_strlen($phone) > 64) {
+      throw new InvalidArgumentException('Phone too big. Max length size = 64');
+    }
 
-    return Report::fromArray($response);
+    if (!preg_match('/\+?\d+/', $phone)) {
+      throw new InvalidArgumentException('Phone must be format as +37121234567');
+    }
+
+    $this->phone = $phone;
+
+    return $this;
   }
 
-  /**
-   * @param string $path
-   * @param array  $data
-   *
-   * @return array|null
-   */
-  private function sendRequest(string $path, ?array $data = null): array
+  public function toArray(): array
   {
-    $path = sprintf('possystem/%s/%s/%s', $this->apiVersion, $this->groupCode, $path);
-
-    return $this->sendRawRequest($path, $data);
-  }
-
-  private function getToken(string $login, string $password): string
-  {
-    $CACHE_KEY = 'atol.token_' . $login;
-    if($this->cache->has($CACHE_KEY)) {
-      return (string)$this->cache->get($CACHE_KEY);
+    if (is_null($this->email) && is_null($this->phone)) {
+      throw new SdkException('Email or phone required');
     }
 
-    $data = [
-      'login' => $login,
-      'pass' => $password,
-    ];
+    $result = [];
 
-    $path = sprintf('possystem/%s/getToken', $this->apiVersion);
-
-    $response = $this->sendRawRequest($path, $data);
-
-    $error = $response['error'];
-    if (null !== $error) {
-      $this->log(LogLevel::WARNING, 'error: {error} {response}', [
-        'error' => $error['text'],
-        'response' => $response,
-      ]);
-      throw new ClientException($error['error_id'].' - '.$error['text']);
+    if (!is_null($this->email)) {
+      $result['email'] = $this->email;
     }
 
-    $token = $response['token'];
-    $this->cache->set($CACHE_KEY, $token, 3600 * 24);
-
-    return $token;
-  }
-
-  /**
-   * @param string     $path
-   * @param array|null $data
-   *
-   * @return array
-   */
-  private function sendRawRequest(string $path, $data = null): array
-  {
-    if (null === $data) {
-      $method = 'GET';
-    } elseif (is_array($data)) {
-      $method = 'POST';
-      $data = json_encode($data);
-    } else {
-      throw new InvalidArgumentException('Unexpected type of $data, excepts array or null');
+    if (!is_null($this->phone)) {
+      $result['phone'] = $this->phone;
     }
 
-    $url = sprintf('%s/%s', $this->host, $path);
-
-    $headers = [
-      'Accept: application/json; charset=utf-8',
-      'Token: '.$this->token,
-    ];
-
-    if ('POST' == $method) {
-      $headers[] = 'Content-Type: application/json';
-    }
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    if ('POST' == $method) {
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    }
-
-    $response = curl_exec($ch);
-
-    $this->log(LogLevel::DEBUG, 'request: url={url} headers={headers} data={data}', [
-      'url' => $url,
-      'headers' => $headers,
-      'data' => $data,
-    ]);
-
-    $error = null;
-    if (false === $response) {
-      $error = curl_error($ch);
-    }
-
-    curl_close($ch);
-    if (null !== $error) {
-      $this->log(LogLevel::WARNING, 'error: {error} {response}', [
-        'error' => $error,
-        'response' => $response,
-      ]);
-      throw new ClientException($error);
-    }
-
-    $this->log(LogLevel::DEBUG, 'response: {response}', ['response' => $response]);
-
-    return json_decode($response, true);
-  }
-
-  private function log($level, $message, $context)
-  {
-    if (null !== $this->logger) {
-      $message = sprintf('Atol Online %s', $message);
-      $this->logger->log($level, $message, $context);
-    }
+    return $result;
   }
 }

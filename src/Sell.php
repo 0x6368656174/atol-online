@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
@@ -9,10 +6,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ItQuasar\AtolOnline;
 
 use DateTime;
 use InvalidArgumentException;
+use function is_null;
 use ItQuasar\AtolOnline\Exception\SdkException;
 
 /**
@@ -55,11 +55,11 @@ class Sell implements Request
    *
    * @param string $externalId
    *
-   * @return Sell
+   * @return $this
    */
   public function setExternalId(string $externalId): self
   {
-    if (strlen($externalId) > 256) {
+    if (mb_strlen($externalId) > 256) {
       throw new InvalidArgumentException('ExternalId too big. Max length size = 256');
     }
 
@@ -83,7 +83,7 @@ class Sell implements Request
    *
    * @param Receipt $receipt
    *
-   * @return Sell
+   * @return $this
    */
   public function setReceipt(Receipt $receipt): self
   {
@@ -95,9 +95,9 @@ class Sell implements Request
   /**
    * Возвращете служебный раздел.
    *
-   * @return Service
+   * @return Service|null
    */
-  public function getService(): Service
+  public function getService(): ?Service
   {
     return $this->service;
   }
@@ -105,11 +105,11 @@ class Sell implements Request
   /**
    * Устанавливает служебный раздел.
    *
-   * @param Service $service
+   * @param Service|null $service
    *
-   * @return Sell
+   * @return $this
    */
-  public function setService(Service $service): self
+  public function setService(?Service $service): self
   {
     $this->service = $service;
 
@@ -131,7 +131,7 @@ class Sell implements Request
    *
    * @param DateTime $timestamp
    *
-   * @return Sell
+   * @return $this
    */
   public function setTimestamp(DateTime $timestamp): self
   {
@@ -150,20 +150,22 @@ class Sell implements Request
       throw new SdkException('Receipt required');
     }
 
-    if (is_null($this->service)) {
-      throw new SdkException('Service required');
-    }
-
     if (is_null($this->timestamp)) {
       throw new SdkException('Timestamp required');
     }
 
-    return [
+    $result = [
       'external_id' => $this->externalId,
       'receipt' => $this->receipt->toArray(),
       'service' => $this->service->toArray(),
       'timestamp' => $this->timestamp->format('d.m.Y H:i:s'),
     ];
+
+    if (!is_null($this->service)) {
+      $result['service'] = $this->service->toArray();
+    }
+
+    return $result;
   }
 
   public function getOperation(): string

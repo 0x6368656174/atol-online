@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline\Exception;
 
+/**
+ * Ошибка клиента
+ */
 class ClientException extends SdkException
 {
 }

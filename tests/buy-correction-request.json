@@ -1,21 +1,37 @@
 {
   "external_id": "17052917561851307",
   "correction": {
-    "attributes": {
-      "tax": "vat18",
-      "sno": "osn"
+    "company": {
+      "sno": "osn",
+      "inn": "331122667723",
+      "payment_address": "magazin.ru"
+    },
+    "correction_info": {
+      "type": "self",
+      "base_date": "25.07.2017",
+      "base_number": "1175",
+      "base_name": "Акт технического заключения"
     },
     "payments": [
       {
         "type": 1,
-        "sum": 7612
+        "sum": 2000.0
+      }
+    ],
+    "vats": [
+      {
+        "type": "vat18",
+        "sum": 10.0
+      },
+      {
+        "type": "vat10",
+        "sum": 20.0
       }
     ]
   },
   "service": {
-    "inn": "331122667723",
-    "payment_address": "example.com",
-    "callback_url": "http://example.com/callback"
+    "callback_url": "http://testtest"
   },
   "timestamp": "29.05.2017 17:56:18"
 }
+

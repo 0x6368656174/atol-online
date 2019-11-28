@@ -1,13 +1,12 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
@@ -89,9 +88,9 @@ class Report implements ResponsePart
    * Возвращает статус.
    *
    * Возможные значения:
-   * - Report::STATUS_DONE – готово;
-   * - Report::STATUS_FAIL – ошибка;
-   * - Report::STATUS_WAIT – ожидание
+   * - @see Report::STATUS_DONE – готово;
+   * - @see Report::STATUS_FAIL – ошибка;
+   * - @see Report::STATUS_WAIT – ожидание
    *
    * @return string
    */

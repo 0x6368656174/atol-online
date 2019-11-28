@@ -1,13 +1,12 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the it-quasar/atol-online library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace ItQuasar\AtolOnline;
 
@@ -16,13 +15,13 @@ namespace ItQuasar\AtolOnline;
  */
 class ReportError implements ResponsePart
 {
-  /** Системная ошибка. */
+  /** @var string Системная ошибка. */
   public const TYPE_SYSTEM = 'system';
 
-  /** Ошибка при работе с ККТ. */
+  /** @var string Ошибка при работе с ККТ. */
   public const TYPE_DRIVER = 'driver';
 
-  /** Превышено время ожидания. Время ожидания задается в системе. На данный момент установлено 300 сек. */
+  /** @var string Превышено время ожидания. Время ожидания задается в системе. На данный момент установлено 300 сек. */
   public const TYPE_TIMEOUT = 'timeout';
 
   /** @var int */
@@ -58,9 +57,9 @@ class ReportError implements ResponsePart
    * Возваращает тип источника ошибки.
    *
    * Возможные значения:
-   * - ReportError::TYPE_SYSTEM – системная ошибка;
-   * - ReportError::TYPE_DRIVER – ошибка при работе с ККТ;
-   * - ReportError::TYPE_TIMEOUT – превышено время ожидания. Время ожидания задается в системе.
+   * - @see ReportError::TYPE_SYSTEM – системная ошибка;
+   * - @see ReportError::TYPE_DRIVER – ошибка при работе с ККТ;
+   * - @see ReportError::TYPE_TIMEOUT – превышено время ожидания. Время ожидания задается в системе.
    *   На данный момент установлено 300 сек.
    *
    * @return string
