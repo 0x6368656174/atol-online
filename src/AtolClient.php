@@ -121,7 +121,7 @@ class AtolClient
 
   private function getToken(string $login, string $password): string
   {
-    $CACHE_KEY = 'atol.token';
+    $CACHE_KEY = 'atol.token' . $login;
     if($this->cache->has($CACHE_KEY)) {
       return (string)$this->cache->get($CACHE_KEY);
     }
