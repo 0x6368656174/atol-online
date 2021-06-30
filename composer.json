@@ -1,6 +1,6 @@
 {
   "name": "it-quasar/atol-online",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Библиотека для работы с АТОЛ Онлайн",
   "type": "library",
   "license": "GPL-3.0-or-later",
