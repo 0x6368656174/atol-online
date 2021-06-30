@@ -157,7 +157,6 @@ class Sell implements Request
     $result = [
       'external_id' => $this->externalId,
       'receipt' => $this->receipt->toArray(),
-      'service' => $this->service->toArray(),
       'timestamp' => $this->timestamp->format('d.m.Y H:i:s'),
     ];
 
