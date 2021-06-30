@@ -83,7 +83,9 @@ class AtolClient
         'error' => $error['text'],
         'response' => $response,
       ]);
-      throw new ClientException($error['error_id'].' - '.$error['text']);
+      if (null == $response['uuid']) {
+        throw new ClientException($error['error_id'].' - '.$error['text']);
+      }
     }
 
     return $response['uuid'];
